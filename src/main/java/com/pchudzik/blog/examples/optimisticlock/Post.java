@@ -6,8 +6,6 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Post {
 	@Id
@@ -20,9 +18,13 @@ public class Post {
 	private String title;
 	private String content;
 
-	public Post update(String newTitle, String newContent) {
+	public Post(String title, String content) {
+		this.title = title;
+		this.content = content;
+	}
+
+	public void update(String newTitle, String newContent) {
 		this.title = newTitle;
 		this.content = newContent;
-		return this;
 	}
 }

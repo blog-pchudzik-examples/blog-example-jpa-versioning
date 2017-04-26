@@ -25,13 +25,10 @@ class OptimisticLockingSpec extends Specification {
 		})
 	}
 
-	def "entity manager merge example"() {
+	def "working optimistic locking when using entityManager.merge"() {
 		given: "Bob saves first post version"
 		final firstPostVersion = transactionTemplate.execute({ status ->
-			entityManager.merge(Post.builder()
-					.title("post")
-					.content("content")
-					.build())
+			entityManager.merge(new Post("post", "content"))
 		})
 
 		when: "Alice changes paragraphs order while Bob is fixing typos"
@@ -52,13 +49,10 @@ class OptimisticLockingSpec extends Specification {
 		thrown OptimisticLockException
 	}
 
-	def "using DTO without version example"() {
+	def "working optimistic locking when sending version to the client"() {
 		given: "Bob saves first post version"
 		final postId = transactionTemplate.execute({ status ->
-			entityManager.merge(Post.builder()
-					.title("post")
-					.content("content")
-					.build())
+			entityManager.merge(new Post("post", "content"))
 		}).id
 
 		when: "Alice changes paragraphs order while Bob is fixing typos"
@@ -95,10 +89,7 @@ class OptimisticLockingSpec extends Specification {
 	def "using DTO with version example"() {
 		given: "Bob saves first post version"
 		final Post firstPostVersion = transactionTemplate.execute({ status ->
-			entityManager.merge(Post.builder()
-					.title("post")
-					.content("content")
-					.build())
+			entityManager.merge(new Post("post", "content"))
 		})
 
 		when: "Alice changes paragraphs order while Bob is fixing typos"
